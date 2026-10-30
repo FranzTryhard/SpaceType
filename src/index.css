@@ -2,29 +2,78 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
 @layer base {
   :root {
+    --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    --font-display: 'Space Grotesk', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-brand: 'Orbitron', 'Space Grotesk', sans-serif;
   }
 
   body {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     background-color: #0d0b1d;
     color: #e0edff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Headings use Space Grotesk with consistent hierarchy and negative letter-spacing */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+  }
+
+  /* Buttons & Nav elements default to Space Grotesk */
+  button, nav {
+    font-family: var(--font-display);
   }
 }
 
-/* Futuristic Brand font utility */
-.font-brand {
-  font-family: var(--font-brand);
+/* Primary display and interface font: Headings, navigation, buttons, branding */
+.font-display {
+  font-family: var(--font-display);
 }
 
-/* Monospace font utility */
+/* Branding lockups */
+.font-brand {
+  font-family: var(--font-display);
+}
+
+/* Secondary font: Descriptions, supporting text, general UI labels */
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Monospaced font: Performance metrics, timers, keystrokes, stats */
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Tabular numbers to prevent layout shifting during rapid updates */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+/* Typing Arena passage text: High-legibility monospaced text */
 .font-typing {
   font-family: var(--font-mono);
-  font-feature-settings: "zero" 1, "calt" 1;
+  font-feature-settings: "zero" 1, "calt" 1, "tnum" 1;
+  letter-spacing: 0.02em;
+}
+
+/* Large heading typography rule: slightly negative letter spacing */
+.heading-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
 }
 
 /* Caret smooth fade in and fade out keyframe */

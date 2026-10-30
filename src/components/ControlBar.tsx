@@ -69,7 +69,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
   return (
     <div className="w-full flex flex-col items-center gap-3 select-none">
       {/* 3 Floating Capsule Controls matching Monkeytype format */}
-      <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
+      <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-display">
         {/* Capsule 1: Punctuation & Numbers */}
         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#141226]/80 border border-slate-800/80 shadow-md">
           <button
@@ -78,11 +78,11 @@ export const ControlBar: React.FC<ControlBarProps> = ({
               setIncludePunctuation(!includePunctuation);
               onResetTest();
             }}
-            className={`flex items-center gap-1 transition-colors cursor-pointer ${
-              includePunctuation ? 'text-[#5b8cff] font-medium' : 'text-slate-500 hover:text-slate-300'
+            className={`flex items-center gap-1 transition-colors cursor-pointer font-display ${
+              includePunctuation ? 'text-[#5b8cff] font-semibold' : 'text-slate-500 hover:text-slate-300 font-medium'
             }`}
           >
-            <span>@</span>
+            <span className="font-mono">@</span>
             <span>punctuation</span>
           </button>
           <span className="text-slate-700">·</span>
@@ -92,17 +92,17 @@ export const ControlBar: React.FC<ControlBarProps> = ({
               setIncludeNumbers(!includeNumbers);
               onResetTest();
             }}
-            className={`flex items-center gap-1 transition-colors cursor-pointer ${
-              includeNumbers ? 'text-[#5b8cff] font-medium' : 'text-slate-500 hover:text-slate-300'
+            className={`flex items-center gap-1 transition-colors cursor-pointer font-display ${
+              includeNumbers ? 'text-[#5b8cff] font-semibold' : 'text-slate-500 hover:text-slate-300 font-medium'
             }`}
           >
-            <span>#</span>
+            <span className="font-mono">#</span>
             <span>numbers</span>
           </button>
         </div>
 
         {/* Capsule 2: Modes (time, words, quote, zen, custom) */}
-        <div className="flex items-center gap-3 px-3 py-1.5 rounded-lg bg-[#141226]/80 border border-slate-800/80 shadow-md">
+        <div className="flex items-center gap-3 px-3 py-1.5 rounded-lg bg-[#141226]/80 border border-slate-800/80 shadow-md font-display">
           <button
             disabled={disabled}
             onClick={() => {
@@ -110,7 +110,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
               onResetTest();
             }}
             className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
-              mode === 'time' ? 'text-[#5b8cff] font-semibold' : 'text-slate-500 hover:text-slate-300'
+              mode === 'time' ? 'text-[#5b8cff] font-semibold' : 'text-slate-500 hover:text-slate-300 font-medium'
             }`}
           >
             <Clock className="w-3.5 h-3.5" />
@@ -124,7 +124,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
               onResetTest();
             }}
             className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
-              mode === 'words' ? 'text-[#5b8cff] font-semibold' : 'text-slate-500 hover:text-slate-300'
+              mode === 'words' ? 'text-[#5b8cff] font-semibold' : 'text-slate-500 hover:text-slate-300 font-medium'
             }`}
           >
             <Type className="w-3.5 h-3.5 font-bold" />
@@ -138,7 +138,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
               onResetTest();
             }}
             className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
-              mode === 'quote' ? 'text-[#5b8cff] font-semibold' : 'text-slate-500 hover:text-slate-300'
+              mode === 'quote' ? 'text-[#5b8cff] font-semibold' : 'text-slate-500 hover:text-slate-300 font-medium'
             }`}
           >
             <Quote className="w-3.5 h-3.5" />
@@ -152,7 +152,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
               onResetTest();
             }}
             className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
-              mode === 'code' ? 'text-[#5b8cff] font-semibold' : 'text-slate-500 hover:text-slate-300'
+              mode === 'code' ? 'text-[#5b8cff] font-semibold' : 'text-slate-500 hover:text-slate-300 font-medium'
             }`}
           >
             <Wrench className="w-3.5 h-3.5" />
@@ -161,7 +161,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
         </div>
 
         {/* Capsule 3: Config Limits (10, 25, 50, 100, shuffle) */}
-        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#141226]/80 border border-slate-800/80 shadow-md font-typing">
+        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#141226]/80 border border-slate-800/80 shadow-md font-mono">
           {mode === 'time' ? (
             [15, 30, 60, 120].map((t) => (
               <button

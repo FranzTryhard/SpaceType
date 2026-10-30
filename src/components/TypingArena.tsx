@@ -265,10 +265,10 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
       />
 
       {/* Live subtle status indicator (only shown if test is running) */}
-      <div className="w-full h-8 flex items-center justify-between px-2 text-xs font-typing text-slate-500 mb-2">
+      <div className="w-full h-8 flex items-center justify-between px-2 text-xs font-mono text-slate-500 mb-2">
         {status === 'running' ? (
           <>
-            <div className="flex items-center gap-4 text-[#5b8cff] font-medium">
+            <div className="flex items-center gap-4 text-[#5b8cff] font-medium font-mono tabular-nums">
               {remainingTime !== undefined && (
                 <span>{Math.ceil(remainingTime)}s</span>
               )}
@@ -277,7 +277,7 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
               )}
             </div>
 
-            <div className="flex items-center gap-6 tabular-nums">
+            <div className="flex items-center gap-6 font-mono tabular-nums">
               {showLiveWpm && <span>{liveWpm} wpm</span>}
               {showLiveAcc && <span>{liveAcc}%</span>}
             </div>
@@ -377,7 +377,7 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
             onClick={focusInput}
             className="absolute inset-0 z-30 flex items-center justify-center bg-[#0d0b1d]/75 backdrop-blur-xs rounded-xl cursor-pointer"
           >
-            <div className="flex items-center gap-2 text-[#5b8cff] text-sm font-sans font-medium">
+            <div className="flex items-center gap-2 text-[#5b8cff] text-sm font-display font-medium">
               <Play className="w-4 h-4 fill-[#5b8cff]" />
               <span>Click or press any key to focus</span>
             </div>
@@ -387,7 +387,7 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
 
       {/* Curated quote citation if applicable */}
       {quoteAuthor && (
-        <div className="w-full text-right text-xs text-slate-500 italic pt-2">
+        <div className="w-full text-right text-xs text-slate-400 italic pt-2 font-sans">
           — {quoteAuthor} {quoteSource ? `(${quoteSource})` : ''}
         </div>
       )}
@@ -399,11 +399,11 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
       <div className="pt-6 flex items-center gap-2 text-xs text-slate-500 font-sans">
         <button
           onClick={onRestartTest}
-          className="flex items-center gap-1.5 hover:text-slate-300 transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 hover:text-slate-300 transition-colors cursor-pointer font-display"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>restart test</span>
-          <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-typing ml-1 text-slate-400">
+          <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono tabular-nums ml-1 text-slate-400">
             tab
           </kbd>
         </button>

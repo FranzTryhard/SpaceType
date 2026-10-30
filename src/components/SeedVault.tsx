@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { KeyRound, Play, Copy, Check, Sparkles, Compass } from 'lucide-react';
+import { KeyRound, Play, Copy, Check } from 'lucide-react';
 import { TestMode, LexiconType } from '../engine/corpus.ts';
 
 interface SeedItem {
@@ -97,33 +97,33 @@ export const SeedVault: React.FC<SeedVaultProps> = ({ onSelectSeed, currentSeed 
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto space-y-6">
+    <div className="relative w-full max-w-4xl mx-auto space-y-6 font-sans">
       {/* Header Banner */}
       <div className="p-6 rounded-xl bg-slate-950/70 border border-slate-800 backdrop-blur-md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-cyan-400 font-semibold text-sm">
+            <div className="flex items-center gap-2 text-cyan-400 font-semibold text-sm font-display">
               <KeyRound className="w-4 h-4" />
               <span>Deterministic Seed Vault</span>
             </div>
-            <p className="text-xs text-slate-400 mt-1 max-w-xl">
-              Every typing test in Vectra is generated deterministically from an immutable seed.
+            <p className="text-xs text-slate-400 mt-1 max-w-xl font-sans leading-relaxed">
+              Every typing test in SpaceType is generated deterministically from an immutable seed.
               Share a seed with colleagues or replay your own seed to benchmark exact progress.
             </p>
           </div>
 
           {/* Quick Custom Seed Input */}
-          <form onSubmit={handleCustomSubmit} className="flex items-center gap-2">
+          <form onSubmit={handleCustomSubmit} className="flex items-center gap-2 font-display">
             <input
               type="text"
               placeholder="ENTER SEED..."
               value={customInput}
               onChange={(e) => setCustomInput(e.target.value)}
-              className="px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white font-typing uppercase tracking-wider focus:outline-hidden focus:border-cyan-400 w-36"
+              className="px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white font-mono uppercase tracking-wider focus:outline-hidden focus:border-cyan-400 w-36"
             />
             <button
               type="submit"
-              className="px-3 py-1.5 text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg transition-colors cursor-pointer"
             >
               Load
             </button>
@@ -146,30 +146,30 @@ export const SeedVault: React.FC<SeedVaultProps> = ({ onSelectSeed, currentSeed 
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-typing text-cyan-400 font-semibold tracking-wider">
+                  <div className="flex items-center gap-2 font-sans">
+                    <span className="text-[11px] font-mono text-cyan-400 font-semibold tracking-wider">
                       {item.seed}
                     </span>
                     <span className="text-slate-500">·</span>
                     <span className="text-[11px] text-slate-400">{item.category}</span>
                   </div>
-                  <h3 className="text-sm font-semibold text-white mt-1">{item.title}</h3>
+                  <h3 className="text-sm font-semibold text-white mt-1 font-display">{item.title}</h3>
                 </div>
 
                 <div className="text-right">
-                  <span className="text-[10px] uppercase tracking-wider text-slate-500 font-typing block">
+                  <span className="text-[10px] uppercase tracking-wider text-slate-500 font-display font-semibold block">
                     Benchmark
                   </span>
-                  <span className="text-xs font-typing text-emerald-400 font-medium">
+                  <span className="text-xs font-mono text-emerald-400 font-medium tabular-nums">
                     ~{item.benchmarkWpm} WPM
                   </span>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-400 mt-2 line-clamp-2">{item.description}</p>
+              <p className="text-xs text-slate-400 mt-2 line-clamp-2 font-sans leading-relaxed">{item.description}</p>
 
-              <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between">
-                <span className="text-[11px] text-slate-500 capitalize">
+              <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between font-display">
+                <span className="text-[11px] text-slate-500 capitalize font-sans">
                   Mode: <span className="text-slate-300 font-medium">{item.mode}</span>
                 </span>
 

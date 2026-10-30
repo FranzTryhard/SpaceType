@@ -71,37 +71,37 @@ export const StatsView: React.FC<StatsViewProps> = ({
       {/* Top Lifetime KPI Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-5 rounded-2xl bg-[#121029]/80 border border-slate-700/60 backdrop-blur-2xl">
-          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
+          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block font-display">
             Best Record
           </span>
-          <div className="mt-1 text-3xl font-bold text-white font-typing tabular-nums">
-            {lifetime.bestWpm} <span className="text-sm font-sans text-slate-400">WPM</span>
+          <div className="mt-1 text-3xl font-bold text-white font-mono tabular-nums">
+            {lifetime.bestWpm} <span className="text-sm font-display font-medium text-slate-400">WPM</span>
           </div>
         </div>
 
         <div className="p-5 rounded-2xl bg-[#121029]/80 border border-slate-700/60 backdrop-blur-2xl">
-          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
+          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block font-display">
             Average Speed
           </span>
-          <div className="mt-1 text-3xl font-bold text-[#5b8cff] font-typing tabular-nums">
-            {lifetime.avgWpm} <span className="text-sm font-sans text-slate-400">WPM</span>
+          <div className="mt-1 text-3xl font-bold text-[#5b8cff] font-mono tabular-nums">
+            {lifetime.avgWpm} <span className="text-sm font-display font-medium text-slate-400">WPM</span>
           </div>
         </div>
 
         <div className="p-5 rounded-2xl bg-[#121029]/80 border border-slate-700/60 backdrop-blur-2xl">
-          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
+          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block font-display">
             Avg Accuracy
           </span>
-          <div className="mt-1 text-3xl font-bold text-[#a855f7] font-typing tabular-nums">
+          <div className="mt-1 text-3xl font-bold text-[#a855f7] font-mono tabular-nums">
             {lifetime.avgAccuracy}%
           </div>
         </div>
 
         <div className="p-5 rounded-2xl bg-[#121029]/80 border border-slate-700/60 backdrop-blur-2xl">
-          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
+          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block font-display">
             Total Sessions
           </span>
-          <div className="mt-1 text-3xl font-bold text-white font-typing tabular-nums">
+          <div className="mt-1 text-3xl font-bold text-white font-mono tabular-nums">
             {lifetime.totalTests}
           </div>
         </div>
@@ -111,11 +111,11 @@ export const StatsView: React.FC<StatsViewProps> = ({
       <div className="p-7 rounded-2xl bg-[#121029]/80 border border-slate-700/60 backdrop-blur-2xl">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-base font-bold text-white tracking-wide">Performance Trajectory</h3>
-            <span className="text-xs text-slate-400">Progression across your typing sessions</span>
+            <h3 className="text-base font-bold text-white tracking-tight font-display">Performance Trajectory</h3>
+            <span className="text-xs text-slate-400 font-sans">Progression across your typing sessions</span>
           </div>
 
-          <div className="flex items-center gap-1 p-0.5 rounded-full bg-slate-900 border border-slate-800 text-xs">
+          <div className="flex items-center gap-1 p-0.5 rounded-full bg-slate-900 border border-slate-800 text-xs font-display">
             <button
               onClick={() => setMetric('wpm')}
               className={`px-3 py-1 rounded-full font-medium transition-colors cursor-pointer ${
@@ -176,7 +176,7 @@ export const StatsView: React.FC<StatsViewProps> = ({
             ))}
           </svg>
 
-          <div className="flex justify-between px-6 pt-2 text-[10px] text-slate-500 font-typing">
+          <div className="flex justify-between px-6 pt-2 text-[10px] text-slate-500 font-mono tabular-nums">
             {points.map((p, i) => (
               <span key={i}>{p.label}</span>
             ))}
@@ -187,13 +187,13 @@ export const StatsView: React.FC<StatsViewProps> = ({
       {/* Recent Tests Table */}
       <div className="p-7 rounded-2xl bg-[#121029]/80 border border-slate-700/60 backdrop-blur-2xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-bold text-white tracking-wide">Historical Sessions</h3>
+          <h3 className="text-sm font-bold text-white tracking-tight font-display">Historical Sessions</h3>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 font-display">
             <button
               onClick={handleExport}
               disabled={history.length === 0}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/60 text-slate-300 text-xs hover:text-white transition-colors cursor-pointer disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/60 text-slate-300 text-xs hover:text-white transition-colors cursor-pointer disabled:opacity-50 font-medium"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export</span>
@@ -201,7 +201,7 @@ export const StatsView: React.FC<StatsViewProps> = ({
             <button
               onClick={onClearHistory}
               disabled={history.length === 0}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-900/40 bg-rose-950/20 text-rose-300 text-xs hover:text-white transition-colors cursor-pointer disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-900/40 bg-rose-950/20 text-rose-300 text-xs hover:text-white transition-colors cursor-pointer disabled:opacity-50 font-medium"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear</span>
@@ -210,8 +210,8 @@ export const StatsView: React.FC<StatsViewProps> = ({
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-typing">
-            <thead className="text-slate-400 border-b border-slate-800 pb-2 text-[11px] uppercase tracking-wider">
+          <table className="w-full text-left text-xs">
+            <thead className="text-slate-400 border-b border-slate-800 pb-2 text-[11px] uppercase tracking-wider font-display font-semibold">
               <tr>
                 <th className="py-2.5 px-3">Date</th>
                 <th className="py-2.5 px-3">Mode</th>
@@ -226,18 +226,18 @@ export const StatsView: React.FC<StatsViewProps> = ({
                 history.map((row) => (
                   <tr key={row.id} className="hover:bg-slate-900/40 transition-colors">
                     <td className="py-2.5 px-3 text-slate-400 font-sans">{row.dateStr}</td>
-                    <td className="py-2.5 px-3 capitalize text-slate-300">{row.mode}</td>
-                    <td className="py-2.5 px-3 text-right text-white font-bold tabular-nums">
+                    <td className="py-2.5 px-3 capitalize text-slate-300 font-sans">{row.mode}</td>
+                    <td className="py-2.5 px-3 text-right text-white font-bold font-mono tabular-nums">
                       {row.netWpm}
                     </td>
-                    <td className="py-2.5 px-3 text-right text-[#5b8cff] font-medium tabular-nums">
+                    <td className="py-2.5 px-3 text-right text-[#5b8cff] font-medium font-mono tabular-nums">
                       {row.accuracy}%
                     </td>
-                    <td className="py-2.5 px-3 text-right text-slate-400">{row.seed}</td>
+                    <td className="py-2.5 px-3 text-right text-slate-400 font-mono tabular-nums">{row.seed}</td>
                     <td className="py-2.5 px-3 text-right">
                       <button
                         onClick={() => onReplaySeed(row.seed, row.mode)}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-slate-700 rounded-md transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-slate-700 rounded-md transition-colors cursor-pointer font-display font-medium"
                       >
                         <RotateCcw className="w-3 h-3" />
                         <span>Replay</span>

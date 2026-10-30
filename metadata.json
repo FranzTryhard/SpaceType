@@ -1,6 +1,6 @@
 {
-  "name": "Vectra Typing Studio",
-  "description": "Neo-futuristic monospace typing performance engine with seeded reproducibility, real-time telemetry, and architectural ergonomics.",
+  "name": "SpaceType",
+  "description": "Modern typing test designed to help you improve your speed, accuracy, and focus with real-time telemetry and customizable lexicons.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -94,10 +94,13 @@ export const FONT_SIZES: Record<FontSizeKey, { label: string; textClass: string;
 };
 
 export const SOUND_PROFILES = [
-  { id: 'mechanical', name: 'Tactile Mechanical' },
-  { id: 'synth', name: 'Neo Synth Click' },
-  { id: 'typewriter', name: 'Precision Stroke' },
-  { id: 'off', name: 'Muted (Silent)' },
+  { id: 'mechanical', name: 'Tactile Mechanical', description: 'Clicky switch with dual tactile spring snap' },
+  { id: 'synth', name: 'Neo Synth Click', description: 'Clean digital sine chirp with smooth high-tech tone' },
+  { id: 'typewriter', name: 'Vintage Typewriter', description: 'Crisp metal striker hit with mechanical carriage resonance' },
+  { id: 'thock', name: 'Deep Creamy Thock', description: 'Lubricated heavy linear switches with rich deep body' },
+  { id: 'cyber', name: 'Cyber Laser Pulse', description: 'Fast sci-fi frequency sweep with resonant harmonic snap' },
+  { id: 'marbles', name: 'Ceramic Marbles', description: 'High-frequency glassy bubble click with clear acoustic ring' },
+  { id: 'off', name: 'Muted (Silent)', description: 'Complete silence for focused typing' },
 ] as const;
 
 export type SoundProfileId = (typeof SOUND_PROFILES)[number]['id'];

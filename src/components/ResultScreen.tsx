@@ -121,56 +121,56 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
             <div className="w-6 h-6 rounded-full bg-[#5b8cff] flex items-center justify-center text-slate-950 shrink-0">
               <CheckCircle2 className="w-4 h-4 text-white fill-[#5b8cff]" />
             </div>
-            <h2 className="text-base font-bold text-white tracking-wide">Test Complete!</h2>
+            <h2 className="text-base font-bold text-white tracking-tight font-display">Test Complete!</h2>
           </div>
 
           {/* 3 Metric Columns with Generous Spacing and Zero Overlapping */}
           <div className="flex items-start justify-between gap-2 sm:gap-4 pb-8 border-b border-slate-800/80">
             {/* Metric 1: WPM */}
             <div className="min-w-0 flex-1">
-              <div className="text-2xl sm:text-3xl xl:text-4xl font-bold text-white font-typing tabular-nums whitespace-nowrap">
+              <div className="text-2xl sm:text-3xl xl:text-4xl font-bold text-white font-mono tabular-nums whitespace-nowrap">
                 {stats.netWpm}
               </div>
-              <span className="text-[11px] text-slate-400 block mt-1">WPM</span>
-              <span className="text-[10px] text-emerald-400 font-typing font-medium block mt-1 leading-snug">
+              <span className="text-[11px] text-slate-400 block mt-1 font-display font-semibold uppercase tracking-wider">WPM</span>
+              <span className="text-[10px] text-emerald-400 font-mono tabular-nums font-medium block mt-1 leading-snug">
                 {formatDelta(wpmDelta)} <br />
-                <span className="text-slate-500 font-sans">vs. last test</span>
+                <span className="text-slate-500 font-sans font-normal">vs. last test</span>
               </span>
             </div>
 
             {/* Metric 2: Accuracy */}
             <div className="min-w-0 flex-1 text-center sm:text-left sm:pl-2">
-              <div className="text-2xl sm:text-3xl xl:text-4xl font-bold text-white font-typing tabular-nums whitespace-nowrap">
+              <div className="text-2xl sm:text-3xl xl:text-4xl font-bold text-white font-mono tabular-nums whitespace-nowrap">
                 {stats.accuracy}%
               </div>
-              <span className="text-[11px] text-slate-400 block mt-1">Accuracy</span>
-              <span className="text-[10px] text-emerald-400 font-typing font-medium block mt-1 leading-snug">
+              <span className="text-[11px] text-slate-400 block mt-1 font-display font-semibold uppercase tracking-wider">Accuracy</span>
+              <span className="text-[10px] text-emerald-400 font-mono tabular-nums font-medium block mt-1 leading-snug">
                 {formatDelta(accDelta, true)} <br />
-                <span className="text-slate-500 font-sans">vs. last test</span>
+                <span className="text-slate-500 font-sans font-normal">vs. last test</span>
               </span>
             </div>
 
             {/* Metric 3: Time */}
             <div className="min-w-0 flex-1 text-right">
-              <div className="text-2xl sm:text-3xl xl:text-4xl font-bold text-white font-typing tabular-nums whitespace-nowrap">
+              <div className="text-2xl sm:text-3xl xl:text-4xl font-bold text-white font-mono tabular-nums whitespace-nowrap">
                 {formatMinutesSecs(stats.elapsedSeconds)}
               </div>
-              <span className="text-[11px] text-slate-400 block mt-1">Time</span>
-              <span className="text-[10px] text-[#5b8cff] font-typing font-medium block mt-1 leading-snug">
+              <span className="text-[11px] text-slate-400 block mt-1 font-display font-semibold uppercase tracking-wider">Time</span>
+              <span className="text-[10px] text-[#5b8cff] font-mono tabular-nums font-medium block mt-1 leading-snug">
                 -0:18 <br />
-                <span className="text-slate-500 font-sans">vs. last test</span>
+                <span className="text-slate-500 font-sans font-normal">vs. last test</span>
               </span>
             </div>
           </div>
 
           {/* Feedback note from mockup */}
-          <p className="text-xs text-slate-300 mt-6 leading-relaxed">
+          <p className="text-xs text-slate-300 mt-6 leading-relaxed font-sans">
             Great job! You're typing faster and more accurately than before.
           </p>
         </div>
 
         {/* Action Controls */}
-        <div className="pt-8 space-y-3">
+        <div className="pt-8 space-y-3 font-display">
           <button
             onClick={onNewTest}
             className="w-full py-3.5 px-6 rounded-full text-slate-950 font-semibold text-xs flex items-center justify-center gap-2 transition-all transform hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
@@ -183,18 +183,18 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
 
-          <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+          <div className="flex items-center justify-between text-xs text-slate-400 pt-1 font-display">
             <button
               onClick={onRetrySameSeed}
               className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3 h-3 text-[#5b8cff]" />
-              <span>Retry Seed ({seed})</span>
+              <span>Retry Seed (<span className="font-mono tabular-nums">{seed}</span>)</span>
             </button>
 
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer font-display"
             >
               {copied ? (
                 <>
@@ -217,8 +217,8 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
         <div>
           {/* Performance Header with WPM / Accuracy Toggle */}
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-white tracking-wide">Performance</h3>
-            <div className="flex items-center gap-1 p-0.5 rounded-full bg-slate-900 border border-slate-800 text-[11px]">
+            <h3 className="text-sm font-semibold text-white tracking-tight font-display">Performance</h3>
+            <div className="flex items-center gap-1 p-0.5 rounded-full bg-slate-900 border border-slate-800 text-[11px] font-display">
               <button
                 onClick={() => setChartMetric('wpm')}
                 className={`px-3 py-1 rounded-full font-medium transition-colors cursor-pointer ${
@@ -253,9 +253,9 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
               </defs>
 
               {/* Y Axis Reference grid */}
-              <text x="2" y={padY + 4} fill="#64748b" fontSize="8" fontFamily="monospace">100</text>
-              <text x="2" y={chartHeight / 2} fill="#64748b" fontSize="8" fontFamily="monospace">50</text>
-              <text x="2" y={chartHeight - padY} fill="#64748b" fontSize="8" fontFamily="monospace">25</text>
+              <text x="2" y={padY + 4} fill="#64748b" fontSize="8" fontFamily="'JetBrains Mono', monospace">100</text>
+              <text x="2" y={chartHeight / 2} fill="#64748b" fontSize="8" fontFamily="'JetBrains Mono', monospace">50</text>
+              <text x="2" y={chartHeight - padY} fill="#64748b" fontSize="8" fontFamily="'JetBrains Mono', monospace">25</text>
 
               {/* Gradient Area Fill */}
               {areaD && <path d={areaD} fill="url(#chartGradient)" />}
@@ -288,7 +288,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
             </svg>
 
             {/* X Axis Short Clean Date labels with generous horizontal spacing */}
-            <div className="flex justify-between px-7 pt-2 text-[10px] text-slate-400 font-typing">
+            <div className="flex justify-between px-7 pt-2 text-[10px] text-slate-400 font-mono tabular-nums">
               {points.map((p, i) => (
                 <span key={i} className="whitespace-nowrap">{p.shortLabel}</span>
               ))}
@@ -297,17 +297,17 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
 
           {/* Recent Tests Table matching mockup */}
           <div className="mt-6 pt-5 border-t border-slate-800/80">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="text-xs font-semibold text-white tracking-wide">Recent Tests</h4>
+            <div className="flex items-center justify-between mb-3 font-display">
+              <h4 className="text-xs font-semibold text-white tracking-tight">Recent Tests</h4>
               <button
                 onClick={onViewAllTests}
-                className="text-[11px] text-[#5b8cff] hover:underline cursor-pointer"
+                className="text-[11px] text-[#5b8cff] hover:underline cursor-pointer font-medium"
               >
                 View All
               </button>
             </div>
 
-            <div className="space-y-2 font-typing text-xs">
+            <div className="space-y-2 text-xs">
               {recentTests.length > 0 ? (
                 recentTests.map((t) => (
                   <div
@@ -315,8 +315,8 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
                     className="flex items-center justify-between py-2 px-3.5 rounded-lg bg-slate-900/60 border border-slate-800/60"
                   >
                     <span className="text-slate-400 font-sans text-xs">{t.dateStr.split(',')[0]}</span>
-                    <span className="text-white font-semibold tabular-nums">{t.netWpm} WPM</span>
-                    <span className="text-[#5b8cff] font-medium tabular-nums">{t.accuracy}%</span>
+                    <span className="text-white font-semibold font-mono tabular-nums">{t.netWpm} WPM</span>
+                    <span className="text-[#5b8cff] font-medium font-mono tabular-nums">{t.accuracy}%</span>
                   </div>
                 ))
               ) : (

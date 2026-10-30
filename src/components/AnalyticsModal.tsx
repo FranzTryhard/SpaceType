@@ -48,7 +48,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/40">
           <div className="flex items-center gap-2">
             <Trophy className="w-5 h-5 text-cyan-400" />
-            <h2 className="text-base font-semibold text-white tracking-tight">
+            <h2 className="text-base font-bold text-white tracking-tight font-display">
               Typing Analytics & History Vault
             </h2>
           </div>
@@ -62,54 +62,54 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 font-sans">
           {/* Lifetime Statistics KPIs */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             <div className="p-4 rounded-lg bg-slate-950/60 border border-slate-800">
-              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-typing">Best WPM</span>
-              <div className="mt-1 text-2xl font-bold text-white font-typing tabular-nums">
+              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-display font-semibold block">Best WPM</span>
+              <div className="mt-1 text-2xl font-bold text-white font-mono tabular-nums">
                 {lifetime.bestWpm}
               </div>
             </div>
 
             <div className="p-4 rounded-lg bg-slate-950/60 border border-slate-800">
-              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-typing">Average WPM</span>
-              <div className="mt-1 text-2xl font-bold text-cyan-300 font-typing tabular-nums">
+              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-display font-semibold block">Average WPM</span>
+              <div className="mt-1 text-2xl font-bold text-cyan-300 font-mono tabular-nums">
                 {lifetime.avgWpm}
               </div>
             </div>
 
             <div className="p-4 rounded-lg bg-slate-950/60 border border-slate-800">
-              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-typing">Avg Accuracy</span>
-              <div className="mt-1 text-2xl font-bold text-emerald-400 font-typing tabular-nums">
+              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-display font-semibold block">Avg Accuracy</span>
+              <div className="mt-1 text-2xl font-bold text-emerald-400 font-mono tabular-nums">
                 {lifetime.avgAccuracy}%
               </div>
             </div>
 
             <div className="p-4 rounded-lg bg-slate-950/60 border border-slate-800">
-              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-typing">Completed</span>
-              <div className="mt-1 text-2xl font-bold text-slate-200 font-typing tabular-nums">
+              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-display font-semibold block">Completed</span>
+              <div className="mt-1 text-2xl font-bold text-slate-200 font-mono tabular-nums">
                 {lifetime.totalTests}
               </div>
             </div>
 
             <div className="p-4 rounded-lg bg-slate-950/60 border border-slate-800">
-              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-typing">Practice Time</span>
-              <div className="mt-1 text-2xl font-bold text-slate-200 font-typing tabular-nums">
+              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-display font-semibold block">Practice Time</span>
+              <div className="mt-1 text-2xl font-bold text-slate-200 font-mono tabular-nums">
                 {Math.round(lifetime.totalSeconds / 60)}m
               </div>
             </div>
 
             <div className="p-4 rounded-lg bg-slate-950/60 border border-slate-800">
-              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-typing">Keystrokes</span>
-              <div className="mt-1 text-2xl font-bold text-slate-200 font-typing tabular-nums">
+              <span className="text-[11px] uppercase tracking-wider text-slate-500 font-display font-semibold block">Keystrokes</span>
+              <div className="mt-1 text-2xl font-bold text-slate-200 font-mono tabular-nums">
                 {lifetime.totalKeystrokes.toLocaleString()}
               </div>
             </div>
           </div>
 
           {/* Table Controls */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-800">
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-800 font-display">
             <div className="flex items-center gap-2 text-xs">
               <span className="text-slate-400 font-medium">Filter Mode:</span>
               <div className="flex items-center gap-1 p-0.5 bg-slate-950 border border-slate-800 rounded-md">
@@ -152,8 +152,8 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
 
           {/* Test History List Table */}
           <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-950/50">
-            <table className="w-full text-left text-xs font-typing">
-              <thead className="bg-slate-900/80 text-slate-400 border-b border-slate-800 text-[11px] uppercase tracking-wider">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-900/80 text-slate-400 border-b border-slate-800 text-[11px] uppercase tracking-wider font-display font-semibold">
                 <tr>
                   <th className="py-3 px-4">Date</th>
                   <th className="py-3 px-4">Mode</th>
@@ -169,28 +169,28 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
                 {filteredHistory.length > 0 ? (
                   filteredHistory.map((row) => (
                     <tr key={row.id} className="hover:bg-slate-900/40 transition-colors">
-                      <td className="py-3 px-4 text-slate-400">{row.dateStr}</td>
-                      <td className="py-3 px-4 capitalize text-slate-300">{row.mode}</td>
-                      <td className="py-3 px-4 text-right text-white font-bold tabular-nums">
+                      <td className="py-3 px-4 text-slate-400 font-sans">{row.dateStr}</td>
+                      <td className="py-3 px-4 capitalize text-slate-300 font-sans">{row.mode}</td>
+                      <td className="py-3 px-4 text-right text-white font-bold font-mono tabular-nums">
                         {row.netWpm}
                       </td>
-                      <td className="py-3 px-4 text-right text-slate-400 tabular-nums">
+                      <td className="py-3 px-4 text-right text-slate-400 font-mono tabular-nums">
                         {row.rawWpm}
                       </td>
-                      <td className="py-3 px-4 text-right text-cyan-300 tabular-nums font-medium">
+                      <td className="py-3 px-4 text-right text-cyan-300 font-medium font-mono tabular-nums">
                         {row.accuracy}%
                       </td>
-                      <td className="py-3 px-4 text-right text-slate-400 tabular-nums">
+                      <td className="py-3 px-4 text-right text-slate-400 font-mono tabular-nums">
                         {row.consistency}%
                       </td>
-                      <td className="py-3 px-4 text-slate-400">{row.seed}</td>
+                      <td className="py-3 px-4 text-slate-400 font-mono tabular-nums">{row.seed}</td>
                       <td className="py-3 px-4 text-right">
                         <button
                           onClick={() => {
                             onReplaySeed(row.seed, row.mode);
                             onClose();
                           }}
-                          className="inline-flex items-center gap-1 px-2 py-1 text-[11px] bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-slate-700 rounded transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 px-2 py-1 text-[11px] bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-slate-700 rounded transition-colors cursor-pointer font-display font-medium"
                           title="Replay this exact seed test"
                         >
                           <RotateCcw className="w-3 h-3" />

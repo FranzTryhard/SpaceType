@@ -11,7 +11,9 @@ export interface AppSettings {
   caretStyle: CaretStyle;
   fontSize: FontSizeKey;
   soundProfile: SoundProfileId;
-  soundVolume: number;
+  soundVolume: number; // Keypress volume (0.0 to 1.0)
+  errorVolume: number; // Error sound volume (0.0 to 1.0)
+  successVolume: number; // Success and completion sound volume (0.0 to 1.0)
   blindMode: boolean;
   quickRestartWithTab: boolean;
   smoothCaret: boolean;
@@ -41,6 +43,8 @@ export function getDefaultSettings(): AppSettings {
     fontSize: 'lg',
     soundProfile: 'mechanical',
     soundVolume: 0.5,
+    errorVolume: 0.45,
+    successVolume: 0.6,
     blindMode: false,
     quickRestartWithTab: true,
     smoothCaret: true,
@@ -63,7 +67,17 @@ export function loadSettings(): AppSettings {
     const raw = localStorage.getItem(SETTINGS_KEY);
     if (!raw) return getDefaultSettings();
     const parsed = JSON.parse(raw);
-    return { ...getDefaultSettings(), ...parsed };
+    const defaults = getDefaultSettings();
+    return {
+      ...defaults,
+      ...parsed,
+      errorVolume: typeof parsed.errorVolume === 'number'
+        ? parsed.errorVolume
+        : (typeof parsed.soundVolume === 'number' ? Math.min(1, parsed.soundVolume * 0.9) : defaults.errorVolume),
+      successVolume: typeof parsed.successVolume === 'number'
+        ? parsed.successVolume
+        : (typeof parsed.soundVolume === 'number' ? Math.min(1, parsed.soundVolume * 1.2) : defaults.successVolume),
+    };
   } catch {
     return getDefaultSettings();
   }

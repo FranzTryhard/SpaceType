@@ -208,7 +208,7 @@ export default function App() {
 
     setStatus('completed');
     setCompletedStats(stats);
-    soundEngine.playComplete(settings.soundVolume);
+    soundEngine.playComplete(settings.successVolume);
 
     const record: TestResultRecord = {
       id: `test-${Date.now()}`,
@@ -247,6 +247,7 @@ export default function App() {
     settings.testMode,
     settings.lexicon,
     settings.soundVolume,
+    settings.successVolume,
   ]);
 
   // Timer ticker
@@ -332,7 +333,7 @@ export default function App() {
         soundEngine.playKeypress(settings.soundProfile, settings.soundVolume);
         setStreak((s) => s + 1);
       } else {
-        soundEngine.playError(settings.soundVolume);
+        soundEngine.playError(settings.errorVolume);
         setStreak(0);
         if (targetChar) {
           setErrorKeys((prev) => ({
@@ -352,7 +353,7 @@ export default function App() {
   };
 
   const handleSpacePress = () => {
-    soundEngine.playKeypress(settings.soundProfile, settings.soundVolume);
+    soundEngine.playKeypress(settings.soundProfile, settings.soundVolume, true);
 
     const isLastWord = currentWordIndex >= content.words.length - 1;
     if (isLastWord) {
@@ -457,6 +458,7 @@ export default function App() {
           setActiveTab('test');
           initTestContent();
         }}
+        onOpenSettings={() => setIsSettingsOpen(true)}
       />
 
       {/* Main Viewport Container */}
@@ -578,9 +580,9 @@ export default function App() {
         />
       )}
 
-      {/* Bottom Subtitle Tag from mockup */}
-      <footer className="relative z-10 w-full py-4 border-t border-slate-900/80 text-center text-[10px] text-slate-500 font-brand tracking-[0.2em]">
-        <span>SPACE//TYPE — PRACTICE TODAY. TYPE BETTER TOMORROW.</span>
+      {/* Bottom Subtitle Tag */}
+      <footer className="relative z-10 w-full py-4 border-t border-slate-900/80 text-center text-[11px] text-slate-500 font-display font-medium tracking-wider uppercase">
+        <span>SpaceType — Practice Today. Type Better Tomorrow.</span>
       </footer>
     </div>
   );

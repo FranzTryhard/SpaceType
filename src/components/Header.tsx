@@ -4,18 +4,20 @@
  */
 
 import React from 'react';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Sliders } from 'lucide-react';
 
 interface HeaderProps {
   activeTab: 'home' | 'test' | 'stats' | 'about';
   setActiveTab: (tab: 'home' | 'test' | 'stats' | 'about') => void;
   onStartTesting: () => void;
+  onOpenSettings?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
   onStartTesting,
+  onOpenSettings,
 }) => {
   const isTestingView = activeTab === 'test';
 
@@ -31,29 +33,29 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Cybernetic geometric keycap emblem */}
           <div className="relative w-7 h-7 rounded-lg bg-gradient-to-tr from-[#5b8cff] to-[#a855f7] p-[1.5px] shadow-[0_0_15px_rgba(91,140,255,0.45)] transition-transform duration-300 group-hover:scale-105">
             <div className="w-full h-full rounded-[6.5px] bg-[#0d0b1d] flex items-center justify-center">
-              <span className="font-brand font-black text-xs text-transparent bg-clip-text bg-gradient-to-br from-white via-[#b8d3ff] to-[#a855f7]">
+              <span className="font-display font-bold text-xs text-transparent bg-clip-text bg-gradient-to-br from-white via-[#b8d3ff] to-[#a855f7]">
                 S
               </span>
             </div>
           </div>
 
-          {/* Futuristic Typography in Orbitron */}
-          <div className="flex items-center tracking-[0.22em] font-brand font-black text-[15px] sm:text-base uppercase">
+          {/* Futuristic Typography in Space Grotesk */}
+          <div className="flex items-center font-display font-bold text-base sm:text-lg tracking-tight">
             <span className="text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.35)]">
-              SPACE
+              Space
             </span>
             <span className="mx-1 text-transparent bg-clip-text bg-gradient-to-r from-[#5b8cff] to-[#a855f7] font-sans font-light tracking-normal drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]">
               //
             </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#b8d3ff] to-[#e0edff] drop-shadow-[0_0_8px_rgba(91,140,255,0.4)]">
-              TYPE
+              Type
             </span>
           </div>
         </button>
 
         {/* Center: Clean Nav Links (when not on bare test screen) */}
         {!isTestingView ? (
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400 font-display">
             <button
               onClick={() => setActiveTab('home')}
               className={`transition-colors pb-0.5 cursor-pointer ${
@@ -96,11 +98,22 @@ export const Header: React.FC<HeaderProps> = ({
         )}
 
         {/* Right Action */}
-        <div>
+        <div className="flex items-center gap-2.5">
+          {onOpenSettings && (
+            <button
+              onClick={onOpenSettings}
+              className="p-2 text-slate-400 hover:text-white hover:bg-slate-800/60 rounded-full transition-colors cursor-pointer border border-transparent hover:border-slate-700/60"
+              title="Sound Packs & Configuration"
+              aria-label="Open settings"
+            >
+              <Sliders className="w-4 h-4 text-cyan-400" />
+            </button>
+          )}
+
           {isTestingView ? (
             <button
               onClick={() => setActiveTab('home')}
-              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer font-display"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Home</span>
@@ -108,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
           ) : (
             <button
               onClick={onStartTesting}
-              className="flex items-center gap-2 px-5 py-2 text-xs font-semibold text-white bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 rounded-full transition-all cursor-pointer shadow-sm hover:shadow-purple-500/10"
+              className="flex items-center gap-2 px-5 py-2 text-xs font-semibold text-white bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 rounded-full transition-all cursor-pointer shadow-sm hover:shadow-purple-500/10 font-display"
             >
               <span>Start Testing</span>
               <ArrowRight className="w-3 h-3" />

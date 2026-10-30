@@ -36,7 +36,7 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
     return (
       <div
         key={key}
-        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-[5px] border flex items-center justify-center font-typing text-[11px] font-medium lowercase select-none transition-all duration-75 ${style}`}
+        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-[5px] border flex items-center justify-center font-mono text-[11px] font-medium lowercase select-none transition-all duration-75 ${style}`}
       >
         {key}
       </div>
