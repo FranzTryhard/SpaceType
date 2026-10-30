@@ -1,0 +1,6 @@
+{
+  "name": "Vectra Typing Studio",
+  "description": "Neo-futuristic monospace typing performance engine with seeded reproducibility, real-time telemetry, and architectural ergonomics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
