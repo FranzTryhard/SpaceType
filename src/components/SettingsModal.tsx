@@ -426,6 +426,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
             <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/60 border border-slate-800">
               <div>
+                <span className="font-medium text-slate-200 block font-display">Tactile Keyboard Overlay</span>
+                <span className="text-[11px] text-slate-500 block font-sans">
+                  Real-time interactive mechanical keyboard visualizer with error shake & guidance
+                </span>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.showKeyboardOverlay}
+                onChange={(e) => updateSettings({ showKeyboardOverlay: e.target.checked })}
+                className="w-4 h-4 rounded text-cyan-600 focus:ring-0 cursor-pointer"
+              />
+            </div>
+
+            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/60 border border-slate-800">
+              <div>
                 <span className="font-medium text-slate-200 block font-display">Quick Restart with Tab Key</span>
                 <span className="text-[11px] text-slate-500 block font-sans">
                   Pressing Tab instantly resets the test with zero delay

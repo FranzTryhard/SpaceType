@@ -20,6 +20,7 @@ export interface AppSettings {
   showLiveWpm: boolean;
   showLiveAcc: boolean;
   reducedMotion: boolean;
+  showKeyboardOverlay: boolean;
   // Test presets
   testMode: TestMode;
   timeLimit: number; // 15, 30, 60, 120
@@ -51,6 +52,7 @@ export function getDefaultSettings(): AppSettings {
     showLiveWpm: true,
     showLiveAcc: true,
     reducedMotion: Boolean(prefersReduced),
+    showKeyboardOverlay: true,
     testMode: 'words',
     timeLimit: 30,
     wordLimit: 25,

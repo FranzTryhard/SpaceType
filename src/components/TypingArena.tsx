@@ -4,10 +4,10 @@
  */
 
 import React, { useRef, useEffect, useState, useLayoutEffect, useCallback } from 'react';
-import { Play, RotateCcw } from 'lucide-react';
+import { Play, RotateCcw, Keyboard } from 'lucide-react';
 import { WordToken, EngineStatus } from '../engine/typingEngine.ts';
 import { CaretStyle, FontSizeKey, FONT_SIZES, ThemeDefinition } from '../tokens/index.ts';
-import { VirtualKeyboard } from './VirtualKeyboard.tsx';
+import { KeyboardOverlay, ActiveKeystroke } from './KeyboardOverlay.tsx';
 
 interface TypingArenaProps {
   words: WordToken[];
@@ -29,6 +29,10 @@ interface TypingArenaProps {
   streak: number;
   quoteAuthor?: string;
   quoteSource?: string;
+  showKeyboardOverlay?: boolean;
+  onToggleKeyboardOverlay?: () => void;
+  errorKeys?: Record<string, number>;
+  onClearErrors?: () => void;
   onInputChange: (input: string) => void;
   onSpacePress: () => void;
   onBackspacePress: (isCtrl: boolean) => void;
@@ -56,6 +60,10 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
   totalWords,
   quoteAuthor,
   quoteSource,
+  showKeyboardOverlay = true,
+  onToggleKeyboardOverlay,
+  errorKeys = {},
+  onClearErrors,
   onInputChange,
   onSpacePress,
   onBackspacePress,
@@ -67,6 +75,8 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isFocused, setIsFocused] = useState(true);
   const [activeKey, setActiveKey] = useState<string | null>(null);
+  const [activeKeystroke, setActiveKeystroke] = useState<ActiveKeystroke | null>(null);
+  const keystrokeTimerRef = useRef<number | null>(null);
 
   const [isTypingActive, setIsTypingActive] = useState(false);
   const typingTimerRef = useRef<number | null>(null);
@@ -100,8 +110,9 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
   }, [status]);
 
   // Target next character for virtual keyboard
+  const isLastWord = currentWordIndex >= words.length - 1;
   const currentWordTarget = words[currentWordIndex]?.targetWord || '';
-  const nextTargetChar = currentWordTarget[currentInput.length] || ' ';
+  const nextTargetChar = currentWordTarget[currentInput.length] || (isLastWord ? null : ' ');
 
   // Monkeytype-exact caret coordinate calculation
   const updateCaret = useCallback(() => {
@@ -188,9 +199,6 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
 
   // Keydown listener
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    setActiveKey(e.key);
-    setTimeout(() => setActiveKey(null), 120);
-
     // Keep caret solid and illuminated while actively typing
     setIsTypingActive(true);
     if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
@@ -210,8 +218,37 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
       return;
     }
 
+    // Determine target character for error detection
+    const currentTarget = words[currentWordIndex]?.targetWord || '';
+    const isLastWordOfTest = currentWordIndex >= words.length - 1;
+    const isAtWordEnd = currentInput.length >= currentTarget.length;
+    const targetCharExpected = isAtWordEnd
+      ? (isLastWordOfTest ? undefined : ' ')
+      : currentTarget[currentInput.length];
+
+    let isError = false;
+    let expectedKey: string | undefined = undefined;
+
     if (e.key === ' ') {
       e.preventDefault();
+      // On the final word, space submits the test; otherwise validate word completion
+      if (!isLastWordOfTest && (currentInput.length < currentTarget.length || currentInput !== currentTarget)) {
+        isError = true;
+        expectedKey = targetCharExpected;
+      }
+      setActiveKey(' ');
+      setActiveKeystroke({
+        key: ' ',
+        isError,
+        expectedKey,
+        timestamp: Date.now(),
+      });
+      if (keystrokeTimerRef.current) clearTimeout(keystrokeTimerRef.current);
+      keystrokeTimerRef.current = window.setTimeout(() => {
+        setActiveKey(null);
+        setActiveKeystroke(null);
+      }, isError ? 350 : 130);
+
       if (currentInput.length > 0) {
         onSpacePress();
       }
@@ -220,6 +257,18 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
 
     if (e.key === 'Backspace') {
       e.preventDefault();
+      setActiveKey('backspace');
+      setActiveKeystroke({
+        key: 'backspace',
+        isError: false,
+        timestamp: Date.now(),
+      });
+      if (keystrokeTimerRef.current) clearTimeout(keystrokeTimerRef.current);
+      keystrokeTimerRef.current = window.setTimeout(() => {
+        setActiveKey(null);
+        setActiveKeystroke(null);
+      }, 130);
+
       const isCtrl = e.ctrlKey || e.altKey || e.metaKey;
       onBackspacePress(isCtrl);
       return;
@@ -234,11 +283,36 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
       e.key === 'Meta' ||
       e.key === 'CapsLock'
     ) {
+      setActiveKey(e.key.toLowerCase());
+      if (keystrokeTimerRef.current) clearTimeout(keystrokeTimerRef.current);
+      keystrokeTimerRef.current = window.setTimeout(() => {
+        setActiveKey(null);
+      }, 130);
       return;
     }
 
     if (e.key.length === 1) {
       e.preventDefault();
+
+      if (isAtWordEnd || e.key !== targetCharExpected) {
+        isError = true;
+        expectedKey = targetCharExpected;
+      }
+
+      setActiveKey(e.key);
+      setActiveKeystroke({
+        key: e.key,
+        isError,
+        expectedKey,
+        timestamp: Date.now(),
+      });
+
+      if (keystrokeTimerRef.current) clearTimeout(keystrokeTimerRef.current);
+      keystrokeTimerRef.current = window.setTimeout(() => {
+        setActiveKey(null);
+        setActiveKeystroke(null);
+      }, isError ? 350 : 130);
+
       onInputChange(currentInput + e.key);
     }
   };
@@ -392,11 +466,21 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
         </div>
       )}
 
-      {/* Centered Virtual Tactile Keyboard from Monkeytype screenshot */}
-      <VirtualKeyboard activeKey={activeKey} targetKey={nextTargetChar} />
+      {/* Visual Keyboard Overlay */}
+      {showKeyboardOverlay && (
+        <KeyboardOverlay
+          activeKey={activeKey}
+          activeKeystroke={activeKeystroke}
+          targetKey={nextTargetChar}
+          errorKeys={errorKeys}
+          theme={theme}
+          onClearErrors={onClearErrors}
+          className="pt-6"
+        />
+      )}
 
-      {/* Quick restart hint */}
-      <div className="pt-6 flex items-center gap-2 text-xs text-slate-500 font-sans">
+      {/* Quick restart & keyboard overlay toggles */}
+      <div className="pt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-500 font-sans">
         <button
           onClick={onRestartTest}
           className="flex items-center gap-1.5 hover:text-slate-300 transition-colors cursor-pointer font-display"
@@ -407,6 +491,22 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
             tab
           </kbd>
         </button>
+
+        {onToggleKeyboardOverlay && (
+          <button
+            onClick={onToggleKeyboardOverlay}
+            className={`flex items-center gap-1.5 transition-colors cursor-pointer font-display ${
+              showKeyboardOverlay ? 'text-slate-300 hover:text-white' : 'text-slate-500 hover:text-slate-300'
+            }`}
+            title="Toggle Visual Keyboard Overlay"
+          >
+            <Keyboard className="w-3.5 h-3.5 text-[#5b8cff]" />
+            <span>keyboard overlay</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono tabular-nums ml-1 text-slate-400">
+              {showKeyboardOverlay ? 'on' : 'off'}
+            </kbd>
+          </button>
+        )}
       </div>
     </div>
   );

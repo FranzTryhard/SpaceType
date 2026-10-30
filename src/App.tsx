@@ -186,28 +186,32 @@ export default function App() {
   );
 
   // Finish test
-  const finishTest = useCallback(() => {
-    if (timerIntervalRef.current) {
-      clearInterval(timerIntervalRef.current);
-      timerIntervalRef.current = null;
-    }
+  const finishTest = useCallback(
+    (customInputs?: string[], customWordIdx?: number) => {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+        timerIntervalRef.current = null;
+      }
 
-    const elapsed = startTimeRef.current
-      ? (performance.now() - startTimeRef.current) / 1000
-      : elapsedSeconds;
+      const elapsed = startTimeRef.current
+        ? (performance.now() - startTimeRef.current) / 1000
+        : elapsedSeconds;
 
-    const stats = calculateStats(
-      content.words,
-      wordInputs,
-      currentWordIndex,
-      elapsed,
-      intervals,
-      errorKeys,
-      telemetry
-    );
+      const inputsToUse = customInputs || wordInputs;
+      const idxToUse = customWordIdx !== undefined ? customWordIdx : currentWordIndex;
 
-    setStatus('completed');
-    setCompletedStats(stats);
+      const stats = calculateStats(
+        content.words,
+        inputsToUse,
+        idxToUse,
+        elapsed,
+        intervals,
+        errorKeys,
+        telemetry
+      );
+
+      setStatus('completed');
+      setCompletedStats(stats);
     soundEngine.playComplete(settings.successVolume);
 
     const record: TestResultRecord = {
@@ -345,17 +349,30 @@ export default function App() {
     }
 
     setCurrentInput(newInput);
-    setWordInputs((prev) => {
-      const copy = [...prev];
-      copy[currentWordIndex] = newInput;
-      return copy;
-    });
+    const updatedInputs = [...wordInputs];
+    updatedInputs[currentWordIndex] = newInput;
+    setWordInputs(updatedInputs);
+
+    // Check if this is the final word of the test
+    const totalWords = settings.testMode === 'words'
+      ? Math.min(settings.wordLimit || 25, content.words.length)
+      : content.words.length;
+    const isLastWord = currentWordIndex >= totalWords - 1;
+
+    // The moment the last word is typed, immediately conclude the test without requiring spacebar!
+    if (isLastWord && newInput === currentWordTarget) {
+      finishTest(updatedInputs, currentWordIndex);
+    }
   };
 
   const handleSpacePress = () => {
     soundEngine.playKeypress(settings.soundProfile, settings.soundVolume, true);
 
-    const isLastWord = currentWordIndex >= content.words.length - 1;
+    const totalWords = settings.testMode === 'words'
+      ? Math.min(settings.wordLimit || 25, content.words.length)
+      : content.words.length;
+    const isLastWord = currentWordIndex >= totalWords - 1;
+
     if (isLastWord) {
       finishTest();
       return;
@@ -366,7 +383,7 @@ export default function App() {
 
     if (
       settings.testMode === 'words' &&
-      currentWordIndex + 1 >= (settings.wordLimit || 25)
+      currentWordIndex + 1 >= totalWords
     ) {
       finishTest();
     }
@@ -541,6 +558,14 @@ export default function App() {
                 streak={streak}
                 quoteAuthor={content.quoteAuthor}
                 quoteSource={content.quoteSource}
+                showKeyboardOverlay={settings.showKeyboardOverlay}
+                onToggleKeyboardOverlay={() =>
+                  handleUpdateSettings({
+                    showKeyboardOverlay: !settings.showKeyboardOverlay,
+                  })
+                }
+                errorKeys={errorKeys}
+                onClearErrors={() => setErrorKeys({})}
                 onInputChange={handleInputChange}
                 onSpacePress={handleSpacePress}
                 onBackspacePress={handleBackspacePress}
@@ -582,7 +607,7 @@ export default function App() {
 
       {/* Bottom Subtitle Tag */}
       <footer className="relative z-10 w-full py-4 border-t border-slate-900/80 text-center text-[11px] text-slate-500 font-display font-medium tracking-wider uppercase">
-        <span>SpaceType — Practice Today. Type Better Tomorrow.</span>
+        <span>NEO//TYPE — Practice Today. Type Better Tomorrow.</span>
       </footer>
     </div>
   );

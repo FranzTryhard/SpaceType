@@ -128,3 +128,46 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 116, 139, 0.8);
 }
+
+/* Keyboard Overlay key animations */
+@keyframes key-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-3px) rotate(-1deg);
+  }
+  40%, 80% {
+    transform: translateX(3px) rotate(1deg);
+  }
+}
+
+.animate-key-shake {
+  animation: key-shake 0.28s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes key-pulse-guide {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(91, 140, 255, 0.4), inset 0 0 8px rgba(91, 140, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 14px 2px rgba(91, 140, 255, 0.7), inset 0 0 12px rgba(168, 85, 247, 0.4);
+  }
+}
+
+.animate-guide-pulse {
+  animation: key-pulse-guide 1.35s ease-in-out infinite;
+}
+
+@keyframes error-flash {
+  0% {
+    box-shadow: 0 0 24px rgba(244, 63, 94, 0.95), inset 0 0 14px rgba(244, 63, 94, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 4px rgba(244, 63, 94, 0.3), inset 0 0 2px rgba(244, 63, 94, 0.2);
+  }
+}
+
+.animate-error-flash {
+  animation: error-flash 0.45s ease-out forwards;
+}
