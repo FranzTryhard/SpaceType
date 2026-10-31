@@ -8,8 +8,8 @@ import { Keyboard, Cpu } from 'lucide-react';
 
 export const ShortcutsView: React.FC = () => {
   const shortcuts = [
-    { key: 'Tab', action: 'Instant Restart', desc: 'Restarts the current typing test with no delay' },
-    { key: 'Esc', action: 'Reset Engine', desc: 'Resets the live timer and clears test state' },
+    { key: 'Esc', action: 'Restart Test', desc: 'Instantly resets the test and generates a fresh session' },
+    { key: 'Tab', action: 'Quick Restart', desc: 'Alternate instant restart shortcut without lifting your hands' },
     { key: 'Space', action: 'Commit Word', desc: 'Advances to the next word token' },
     { key: 'Backspace', action: 'Delete Character', desc: 'Erases the preceding character in active word' },
     { key: 'Ctrl + Backspace', action: 'Erase Word', desc: 'Clears the entirety of the current input word' },

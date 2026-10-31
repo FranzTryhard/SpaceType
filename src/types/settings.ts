@@ -40,7 +40,7 @@ export function getDefaultSettings(): AppSettings {
 
   return {
     themeId: 'neo-cyber',
-    caretStyle: 'underline',
+    caretStyle: 'glow-bar',
     fontSize: 'lg',
     soundProfile: 'mechanical',
     soundVolume: 0.5,
@@ -73,6 +73,7 @@ export function loadSettings(): AppSettings {
     return {
       ...defaults,
       ...parsed,
+      caretStyle: parsed.caretStyle === 'underline' ? 'glow-bar' : (parsed.caretStyle || 'glow-bar'),
       errorVolume: typeof parsed.errorVolume === 'number'
         ? parsed.errorVolume
         : (typeof parsed.soundVolume === 'number' ? Math.min(1, parsed.soundVolume * 0.9) : defaults.errorVolume),

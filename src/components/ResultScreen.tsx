@@ -60,6 +60,18 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
     });
   };
 
+  // Keyboard shortcut: Esc or Tab or Enter instantly restarts a new test
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Tab' || e.key === 'Enter') {
+        e.preventDefault();
+        onNewTest();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onNewTest]);
+
   // Recent 3 tests to match mockup
   const recentTests = history.slice(0, 3);
 
@@ -145,6 +157,9 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
             }}
           >
             <span>Try Again</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-slate-950/20 border border-slate-900/30 text-[10px] font-mono font-semibold uppercase text-slate-900 tracking-wider">
+              esc
+            </kbd>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
 

@@ -91,25 +91,53 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
     height: number;
   }>({
     x: 0,
-    y: 0,
-    width: 14,
-    height: 3.5,
+    y: 2,
+    width: 3,
+    height: 30,
   });
 
   const [scrollOffsetY, setScrollOffsetY] = useState(0);
   const sizeConfig = FONT_SIZES[fontSize] || FONT_SIZES['lg'];
+  const isUnderline = caretStyle === 'underline';
+  const isBlock = caretStyle === 'block';
 
   // Focus management
-  const focusInput = () => {
+  const focusInput = useCallback(() => {
     if (inputRef.current) {
-      inputRef.current.focus();
+      inputRef.current.focus({ preventScroll: true });
       setIsFocused(true);
     }
-  };
+  }, []);
 
   useEffect(() => {
     focusInput();
-  }, [status]);
+  }, [status, focusInput]);
+
+  // Global keydown capture: pressing Esc or Tab restarts test; typing keys automatically engage typing
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement && e.target !== inputRef.current) {
+        return;
+      }
+      if (e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+      if (e.key === 'Escape' || e.key === 'Tab') {
+        e.preventDefault();
+        onRestartTest();
+        focusInput();
+        return;
+      }
+      if (document.activeElement !== inputRef.current && inputRef.current) {
+        if (e.key.length === 1 || e.key === 'Backspace') {
+          inputRef.current.focus({ preventScroll: true });
+          setIsFocused(true);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [onRestartTest, focusInput]);
 
   // Target next character for virtual keyboard
   const isLastWord = currentWordIndex >= words.length - 1;
@@ -129,23 +157,24 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
     const inputLen = currentInput.length;
     const isUnderline = caretStyle === 'underline';
     const isBlock = caretStyle === 'block';
+    const isGlowBar = caretStyle === 'glow-bar' || caretStyle === 'line' || !caretStyle;
 
     let targetX = 0;
     let targetY = 0;
-    let targetW = 2.5;
+    let targetW = isGlowBar ? 3 : 2.5;
     let targetH = 28;
 
     if (inputLen < charEls.length) {
-      // Caret is on or under the upcoming character
+      // Caret is on or in front of the upcoming character
       const targetCharEl = charEls[inputLen];
       const charRect = targetCharEl.getBoundingClientRect();
 
-      targetW = isUnderline || isBlock ? charRect.width : 2.5;
-      targetH = isUnderline ? 3.5 : isBlock ? charRect.height : charRect.height * 0.85;
+      targetW = isUnderline || isBlock ? Math.max(12, charRect.width) : (caretStyle === 'glow-bar' ? 3 : 2.5);
+      targetH = isUnderline ? 3.5 : isBlock ? Math.max(26, charRect.height) : Math.max(24, (charRect.height || 32) * 0.88);
 
       targetX = charRect.left - wrapperRect.left;
       targetY = isUnderline
-        ? charRect.bottom - wrapperRect.top - 4
+        ? charRect.bottom - wrapperRect.top - 2
         : charRect.top - wrapperRect.top + (isBlock ? 0 : 2);
     } else {
       // Caret is after the last character of the word (or extra characters)
@@ -153,24 +182,26 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
         const lastCharEl = charEls[charEls.length - 1];
         const lastRect = lastCharEl.getBoundingClientRect();
 
-        targetW = isUnderline || isBlock ? 14 : 2.5;
-        targetH = isUnderline ? 3.5 : isBlock ? lastRect.height : lastRect.height * 0.85;
+        targetW = isUnderline || isBlock ? Math.max(12, lastRect.width) : (caretStyle === 'glow-bar' ? 3 : 2.5);
+        targetH = isUnderline ? 3.5 : isBlock ? Math.max(26, lastRect.height) : Math.max(24, (lastRect.height || 32) * 0.88);
 
         targetX = lastRect.right - wrapperRect.left;
         targetY = isUnderline
-          ? lastRect.bottom - wrapperRect.top - 4
+          ? lastRect.bottom - wrapperRect.top - 2
           : lastRect.top - wrapperRect.top + (isBlock ? 0 : 2);
       } else {
         const wordRect = currentWordEl.getBoundingClientRect();
         targetX = wordRect.left - wrapperRect.left;
-        targetY = isUnderline ? wordRect.bottom - wrapperRect.top - 4 : wordRect.top - wrapperRect.top;
+        targetY = isUnderline ? wordRect.bottom - wrapperRect.top - 2 : wordRect.top - wrapperRect.top + 2;
+        targetW = isUnderline || isBlock ? 14 : 2.5;
+        targetH = 28;
       }
     }
 
     setCaretCoords({
       x: Math.round(targetX * 10) / 10,
       y: Math.round(targetY * 10) / 10,
-      width: Math.max(2.5, Math.round(targetW * 10) / 10),
+      width: Math.max(2, Math.round(targetW * 10) / 10),
       height: Math.max(3.5, Math.round(targetH * 10) / 10),
     });
 
@@ -191,32 +222,32 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
   }, [updateCaret]);
 
   useEffect(() => {
+    updateCaret();
+    const timer = setTimeout(updateCaret, 40);
     const handleResize = () => updateCaret();
     window.addEventListener('resize', handleResize);
     if (document.fonts?.ready) {
       document.fonts.ready.then(updateCaret);
     }
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', handleResize);
+    };
   }, [updateCaret]);
 
   // Keydown listener
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Keep caret solid and illuminated while actively typing
+    // Keep caret solid while actively typing; resume 1s flicker after 1s of inactivity
     setIsTypingActive(true);
     if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
     typingTimerRef.current = window.setTimeout(() => {
       setIsTypingActive(false);
-    }, 480);
+    }, 1000);
 
-    if (e.key === 'Tab') {
+    if (e.key === 'Escape' || e.key === 'Tab') {
       e.preventDefault();
       onRestartTest();
-      return;
-    }
-
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      onRestartTest();
+      focusInput();
       return;
     }
 
@@ -318,8 +349,6 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
       onInputChange(currentInput + e.key);
     }
   };
-
-  const isUnderline = caretStyle === 'underline';
 
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col items-center select-none cursor-default">
@@ -425,41 +454,42 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
             );
           })}
 
-          {/* Signature Smooth Caret in Electric Blue & Purple Glow */}
-          {isFocused && (
-            <div
-              className={`absolute top-0 left-0 pointer-events-none z-20 will-change-transform ${
-                !smoothCaret || reducedMotion
-                  ? ''
-                  : 'transition-all duration-100 [transition-timing-function:cubic-bezier(0.25,1,0.5,1)]'
-              } ${
-                status === 'idle'
-                  ? 'animate-caret-fade'
-                  : isTypingActive
-                  ? 'opacity-100'
-                  : 'animate-caret-fade'
-              }`}
-              style={{
-                transform: `translate3d(${caretCoords.x}px, ${caretCoords.y}px, 0)`,
-                width: `${caretCoords.width}px`,
-                height: `${caretCoords.height}px`,
-                backgroundColor: theme.caretColor || '#5b8cff',
-                boxShadow: '0 0 10px rgba(91, 140, 255, 0.8), 0 0 20px rgba(168, 85, 247, 0.5)',
-                borderRadius: isUnderline ? '2px' : '1.5px',
-                opacity: caretStyle === 'block' ? 0.35 : 1,
-              }}
-            />
-          )}
+          {/* Signature Smooth Caret in Electric Blue & Purple Glow (Monkeytype Caret) */}
+          <div
+            className={`absolute top-0 left-0 pointer-events-none z-20 will-change-transform ${
+              !smoothCaret || reducedMotion
+                ? ''
+                : 'transition-[transform,width,height] duration-100 [transition-timing-function:cubic-bezier(0.25,1,0.5,1)]'
+            } ${
+              isTypingActive
+                ? 'opacity-100'
+                : 'animate-caret-flicker'
+            }`}
+            style={{
+              transform: `translate3d(${caretCoords.x}px, ${caretCoords.y}px, 0)`,
+              width: `${caretCoords.width}px`,
+              height: `${caretCoords.height}px`,
+              backgroundColor: theme.caretColor || '#5b8cff',
+              boxShadow:
+                caretStyle === 'glow-bar' || caretStyle === 'line' || !caretStyle
+                  ? '0 0 10px rgba(91, 140, 255, 0.95), 0 0 20px rgba(168, 85, 247, 0.65), 0 0 3px #ffffff'
+                  : caretStyle === 'block'
+                  ? '0 0 12px rgba(91, 140, 255, 0.4)'
+                  : '0 0 8px rgba(91, 140, 255, 0.8)',
+              borderRadius: isUnderline ? '2px' : isBlock ? '3px' : '1.5px',
+              opacity: caretStyle === 'block' ? 0.35 : 1,
+            }}
+          />
         </div>
 
-        {/* Unfocused overlay prompt */}
+        {/* Unfocused overlay prompt (clean floating badge, does not hide text or caret) */}
         {!isFocused && (
           <div
             onClick={focusInput}
-            className="absolute inset-0 z-30 flex items-center justify-center bg-[#0d0b1d]/75 backdrop-blur-xs rounded-xl cursor-pointer"
+            className="absolute inset-0 z-30 flex items-center justify-center bg-black/20 backdrop-blur-[1px] rounded-xl cursor-pointer"
           >
-            <div className="flex items-center gap-2 text-[#5b8cff] text-sm font-display font-medium">
-              <Play className="w-4 h-4 fill-[#5b8cff]" />
+            <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#13112a]/95 border border-slate-700/80 text-[#5b8cff] text-xs font-display font-medium shadow-2xl backdrop-blur-md hover:scale-105 transition-transform">
+              <Play className="w-3.5 h-3.5 fill-[#5b8cff]" />
               <span>Click or press any key to focus</span>
             </div>
           </div>
@@ -491,11 +521,12 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
         <button
           onClick={onRestartTest}
           className="flex items-center gap-1.5 hover:text-slate-300 transition-colors cursor-pointer font-display"
+          title="Restart Test (Esc or Tab)"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>restart test</span>
-          <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono tabular-nums ml-1 text-slate-400">
-            tab
+          <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono tabular-nums ml-1 text-slate-300 font-semibold shadow-xs">
+            esc
           </kbd>
         </button>
 
