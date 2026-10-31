@@ -34,21 +34,18 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="relative w-7 h-7 rounded-lg bg-gradient-to-tr from-[#5b8cff] to-[#a855f7] p-[1.5px] shadow-[0_0_15px_rgba(91,140,255,0.45)] transition-transform duration-300 group-hover:scale-105">
             <div className="w-full h-full rounded-[6.5px] bg-[#0d0b1d] flex items-center justify-center">
               <span className="font-display font-bold text-xs text-transparent bg-clip-text bg-gradient-to-br from-white via-[#b8d3ff] to-[#a855f7]">
-                N
+                S
               </span>
             </div>
           </div>
 
-          {/* Futuristic Typography in Space Grotesk matching mockup */}
-          <div className="flex items-center font-display font-bold text-base sm:text-lg tracking-wider">
+          {/* Futuristic Typography in Space Grotesk */}
+          <div className="flex items-center font-display font-bold text-base sm:text-lg tracking-tight">
             <span className="text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.35)]">
-              NEO
+              Space
             </span>
-            <span className="mx-0.5 text-transparent bg-clip-text bg-gradient-to-r from-[#5b8cff] to-[#a855f7] font-sans font-light tracking-normal drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]">
-              //
-            </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#b8d3ff] to-[#e0edff] drop-shadow-[0_0_8px_rgba(91,140,255,0.4)]">
-              TYPE
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5b8cff] to-[#a855f7] drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]">
+              Type
             </span>
           </div>
         </button>

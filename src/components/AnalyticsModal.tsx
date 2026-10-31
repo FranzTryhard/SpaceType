@@ -35,7 +35,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(history, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `vectra_typing_history_${Date.now()}.json`);
+    downloadAnchor.setAttribute('download', `spacetype_history_${Date.now()}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();

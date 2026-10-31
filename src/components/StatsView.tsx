@@ -61,7 +61,7 @@ export const StatsView: React.FC<StatsViewProps> = ({
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(history, null, 2));
     const dl = document.createElement('a');
     dl.setAttribute('href', dataStr);
-    dl.setAttribute('download', `neotype_stats_${Date.now()}.json`);
+    dl.setAttribute('download', `spacetype_stats_${Date.now()}.json`);
     dl.click();
     dl.remove();
   };

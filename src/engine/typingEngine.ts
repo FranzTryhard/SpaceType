@@ -43,6 +43,7 @@ export interface EngineStats {
   elapsedSeconds: number;
   errorKeys: Record<string, number>;
   telemetry: TelemetryPoint[];
+  maxStreak?: number;
 }
 
 export type EngineStatus = 'idle' | 'running' | 'paused' | 'completed';
@@ -145,7 +146,8 @@ export function calculateStats(
   elapsedSeconds: number,
   intervals: number[],
   errorKeys: Record<string, number>,
-  telemetry: TelemetryPoint[]
+  telemetry: TelemetryPoint[],
+  maxStreak?: number
 ): EngineStats {
   const safeTime = Math.max(0.2, elapsedSeconds);
   const minutes = safeTime / 60;
@@ -215,5 +217,6 @@ export function calculateStats(
     elapsedSeconds: Math.round(elapsedSeconds * 10) / 10,
     errorKeys,
     telemetry,
+    maxStreak: maxStreak || 0,
   };
 }

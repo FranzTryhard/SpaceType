@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { ArrowRight, TrendingUp, Layers, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { NeoHeroVisual } from './NeoHeroVisual.tsx';
 
 interface HeroViewProps {
@@ -37,7 +37,7 @@ export const HeroView: React.FC<HeroViewProps> = ({ onStartTest, reducedMotion =
 
           {/* Subtitle matching exact copy */}
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-lg font-sans">
-            NeoType is a modern typing test designed to help you improve your speed, accuracy,
+            SpaceType is a modern typing test designed to help you improve your speed, accuracy,
             and focus. <br className="hidden sm:inline" />
             Simple. Fast. Futuristic.
           </p>
@@ -56,64 +56,12 @@ export const HeroView: React.FC<HeroViewProps> = ({ onStartTest, reducedMotion =
               <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </button>
           </div>
-
-          {/* 3 Feature Callout Row with circular icon badges */}
-          <div className="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 border-t border-slate-800/60">
-            {/* 1. Track Progress */}
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full border border-slate-700/80 bg-slate-900/60 flex items-center justify-center shrink-0 text-[#38bdf8]">
-                <TrendingUp className="w-3.5 h-3.5" />
-              </div>
-              <div>
-                <span className="text-xs font-semibold text-white block font-display">Track Progress</span>
-                <span className="text-[11px] text-slate-400 block mt-0.5 leading-snug font-sans">
-                  See your improvement over time
-                </span>
-              </div>
-            </div>
-
-            {/* 2. Multiple Modes */}
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full border border-slate-700/80 bg-slate-900/60 flex items-center justify-center shrink-0 text-[#c084fc]">
-                <Layers className="w-3.5 h-3.5" />
-              </div>
-              <div>
-                <span className="text-xs font-semibold text-white block font-display">Multiple Modes</span>
-                <span className="text-[11px] text-slate-400 block mt-0.5 leading-snug font-sans">
-                  Choose from different test types
-                </span>
-              </div>
-            </div>
-
-            {/* 3. Detailed Analytics */}
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full border border-slate-700/80 bg-slate-900/60 flex items-center justify-center shrink-0 text-cyan-300">
-                <Sparkles className="w-3.5 h-3.5" />
-              </div>
-              <div>
-                <span className="text-xs font-semibold text-white block font-display">Detailed Analytics</span>
-                <span className="text-[11px] text-slate-400 block mt-0.5 leading-snug font-sans">
-                  Get insights and boost your skills
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Right Column: 3D Visual Art (Span 6 on large screens) */}
         <div className="lg:col-span-6 flex items-center justify-center lg:justify-end">
           <NeoHeroVisual reducedMotion={reducedMotion} />
         </div>
-      </div>
-
-      {/* Flowing bottom cosmic aurora wave from mockup */}
-      <div className="w-full mt-4 sm:mt-6 overflow-hidden pointer-events-none opacity-85">
-        <img
-          src="/assets/aistudio/hero_bottom_wave.png"
-          alt=""
-          className="w-full h-auto object-cover max-h-24 sm:max-h-28"
-          draggable={false}
-        />
       </div>
     </div>
   );

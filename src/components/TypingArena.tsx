@@ -8,6 +8,7 @@ import { Play, RotateCcw, Keyboard } from 'lucide-react';
 import { WordToken, EngineStatus } from '../engine/typingEngine.ts';
 import { CaretStyle, FontSizeKey, FONT_SIZES, ThemeDefinition } from '../tokens/index.ts';
 import { KeyboardOverlay, ActiveKeystroke } from './KeyboardOverlay.tsx';
+import { StreakCounter } from './StreakCounter.tsx';
 
 interface TypingArenaProps {
   words: WordToken[];
@@ -58,6 +59,7 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
   remainingTime,
   elapsedSeconds,
   totalWords,
+  streak = 0,
   quoteAuthor,
   quoteSource,
   showKeyboardOverlay = true,
@@ -338,8 +340,8 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
         aria-label="Typing input field"
       />
 
-      {/* Live subtle status indicator (only shown if test is running) */}
-      <div className="w-full h-8 flex items-center justify-between px-2 text-xs font-mono text-slate-500 mb-2">
+      {/* Live subtle status indicator with glowing streak counter */}
+      <div className="w-full min-h-8 flex items-center justify-between px-2 text-xs font-mono text-slate-500 mb-2">
         {status === 'running' ? (
           <>
             <div className="flex items-center gap-4 text-[#5b8cff] font-medium font-mono tabular-nums">
@@ -349,6 +351,11 @@ export const TypingArena: React.FC<TypingArenaProps> = ({
               {totalWords !== undefined && (
                 <span>{currentWordIndex}/{totalWords}</span>
               )}
+            </div>
+
+            {/* Glowing Visual Combo / Streak Counter */}
+            <div className="flex items-center justify-center">
+              <StreakCounter streak={streak} status={status} reducedMotion={reducedMotion} />
             </div>
 
             <div className="flex items-center gap-6 font-mono tabular-nums">

@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { CheckCircle2, ArrowRight, RotateCcw, Share2, Check } from 'lucide-react';
+import { CheckCircle2, ArrowRight, RotateCcw, Share2, Check, Flame } from 'lucide-react';
 import { EngineStats } from '../engine/typingEngine.ts';
 import { ThemeDefinition } from '../tokens/index.ts';
 import { TestMode, LexiconType } from '../engine/corpus.ts';
@@ -53,7 +53,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
   };
 
   const handleCopy = () => {
-    const text = `⚡ SpaceType Result: ${stats.netWpm} WPM | ${stats.accuracy}% Accuracy | Seed: ${seed}`;
+    const text = `⚡ SpaceType Result: ${stats.netWpm} WPM | ${stats.accuracy}% Accuracy${stats.maxStreak ? ` | ${stats.maxStreak}x Max Streak` : ''} | Seed: ${seed}`;
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -115,8 +115,21 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
             </div>
           </div>
 
+          {/* Max Word Streak Badge */}
+          {stats.maxStreak !== undefined && stats.maxStreak > 0 && (
+            <div className="mt-5 flex items-center justify-between p-2.5 px-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div className="flex items-center gap-2">
+                <Flame className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-[11px] text-slate-300 font-display font-medium">Max Word Streak</span>
+              </div>
+              <span className="text-xs font-mono font-bold text-amber-300 tabular-nums">
+                {stats.maxStreak} {stats.maxStreak === 1 ? 'word' : 'words'}
+              </span>
+            </div>
+          )}
+
           {/* Feedback note from mockup */}
-          <p className="text-xs text-slate-300 mt-6 leading-relaxed font-sans">
+          <p className="text-xs text-slate-300 mt-5 leading-relaxed font-sans">
             Great job! You're typing faster and more accurately than before.
           </p>
         </div>

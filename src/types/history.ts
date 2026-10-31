@@ -23,6 +23,7 @@ export interface TestResultRecord {
   incorrectKeystrokes: number;
   errorKeys: Record<string, number>;
   telemetry: TelemetryPoint[];
+  maxStreak?: number;
 }
 
 export interface LifetimeStats {

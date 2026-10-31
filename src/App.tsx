@@ -128,15 +128,17 @@ export default function App() {
   const [wordInputs, setWordInputs] = useState<string[]>([]);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [maxStreak, setMaxStreak] = useState(0);
   const [telemetry, setTelemetry] = useState<TelemetryPoint[]>([]);
   const [intervals, setIntervals] = useState<number[]>([]);
   const [errorKeys, setErrorKeys] = useState<Record<string, number>>({});
   const [completedStats, setCompletedStats] = useState<EngineStats | null>(null);
 
-  // Timing refs
+  // Timing & streak refs
   const startTimeRef = useRef<number | null>(null);
   const lastKeyTimeRef = useRef<number | null>(null);
   const timerIntervalRef = useRef<number | null>(null);
+  const wordHadErrorRef = useRef<boolean>(false);
 
   const handleUpdateSettings = (newPartial: Partial<AppSettings>) => {
     setSettings((prev) => {
@@ -170,6 +172,8 @@ export default function App() {
       setWordInputs([]);
       setElapsedSeconds(0);
       setStreak(0);
+      setMaxStreak(0);
+      wordHadErrorRef.current = false;
       setTelemetry([]);
       setIntervals([]);
       setErrorKeys({});
@@ -207,7 +211,8 @@ export default function App() {
         elapsed,
         intervals,
         errorKeys,
-        telemetry
+        telemetry,
+        maxStreak
       );
 
       setStatus('completed');
@@ -235,6 +240,7 @@ export default function App() {
       incorrectKeystrokes: stats.incorrectKeystrokes,
       errorKeys: stats.errorKeys,
       telemetry: stats.telemetry,
+      maxStreak: maxStreak,
     };
 
     saveTestResult(record);
@@ -248,6 +254,7 @@ export default function App() {
     intervals,
     errorKeys,
     telemetry,
+    maxStreak,
     settings.testMode,
     settings.lexicon,
     settings.soundVolume,
@@ -335,9 +342,9 @@ export default function App() {
     if (newInput.length > currentInput.length) {
       if (lastCharTyped === targetChar) {
         soundEngine.playKeypress(settings.soundProfile, settings.soundVolume);
-        setStreak((s) => s + 1);
       } else {
         soundEngine.playError(settings.errorVolume);
+        wordHadErrorRef.current = true;
         setStreak(0);
         if (targetChar) {
           setErrorKeys((prev) => ({
@@ -346,6 +353,10 @@ export default function App() {
           }));
         }
       }
+    } else if (newInput.length < currentInput.length) {
+      // User backspaced within current word
+      wordHadErrorRef.current = true;
+      setStreak(0);
     }
 
     setCurrentInput(newInput);
@@ -361,6 +372,13 @@ export default function App() {
 
     // The moment the last word is typed, immediately conclude the test without requiring spacebar!
     if (isLastWord && newInput === currentWordTarget) {
+      if (!wordHadErrorRef.current && newInput.length > 0) {
+        setStreak((prev) => {
+          const next = prev + 1;
+          setMaxStreak((m) => Math.max(m, next));
+          return next;
+        });
+      }
       finishTest(updatedInputs, currentWordIndex);
     }
   };
@@ -372,6 +390,23 @@ export default function App() {
       ? Math.min(settings.wordLimit || 25, content.words.length)
       : content.words.length;
     const isLastWord = currentWordIndex >= totalWords - 1;
+
+    const currentWordTarget = content.words[currentWordIndex] || '';
+    const isPerfect =
+      !wordHadErrorRef.current &&
+      currentInput === currentWordTarget &&
+      currentInput.length > 0;
+
+    if (isPerfect) {
+      setStreak((prev) => {
+        const next = prev + 1;
+        setMaxStreak((m) => Math.max(m, next));
+        return next;
+      });
+    } else {
+      setStreak(0);
+    }
+    wordHadErrorRef.current = false;
 
     if (isLastWord) {
       finishTest();
@@ -395,6 +430,8 @@ export default function App() {
     if (isCtrl || currentInput.length === 0) {
       if (currentInput.length > 0) {
         setCurrentInput('');
+        wordHadErrorRef.current = true;
+        setStreak(0);
         setWordInputs((prev) => {
           const copy = [...prev];
           copy[currentWordIndex] = '';
@@ -405,12 +442,16 @@ export default function App() {
         const prevInput = wordInputs[prevIdx] || '';
         setCurrentWordIndex(prevIdx);
         setCurrentInput(prevInput);
+        wordHadErrorRef.current = true;
+        setStreak(0);
       }
       return;
     }
 
     const sliced = currentInput.slice(0, -1);
     setCurrentInput(sliced);
+    wordHadErrorRef.current = true;
+    setStreak(0);
     setWordInputs((prev) => {
       const copy = [...prev];
       copy[currentWordIndex] = sliced;
@@ -607,7 +648,7 @@ export default function App() {
 
       {/* Bottom Subtitle Tag */}
       <footer className="relative z-10 w-full py-4 border-t border-slate-900/80 text-center text-[11px] text-slate-500 font-display font-medium tracking-wider uppercase">
-        <span>NEO//TYPE — Practice Today. Type Better Tomorrow.</span>
+        <span>SpaceType — Practice Today. Type Better Tomorrow.</span>
       </footer>
     </div>
   );

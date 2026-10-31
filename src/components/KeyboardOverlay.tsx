@@ -238,7 +238,7 @@ export const KeyboardOverlay: React.FC<KeyboardOverlayProps> = ({
   const isKeystrokeError = activeKeystroke?.isError ?? false;
 
   // Render an individual keycap
-  const renderKey = (spec: KeySpec) => {
+  const renderKey = (spec: KeySpec, rowIdx: number, colIdx: number) => {
     const keyLower = spec.primary.toLowerCase();
     const isSpaceKey = keyLower === 'space';
 
@@ -300,7 +300,7 @@ export const KeyboardOverlay: React.FC<KeyboardOverlayProps> = ({
 
     return (
       <div
-        key={`${spec.primary}-${spec.secondary || ''}`}
+        key={`key-${rowIdx}-${colIdx}-${spec.primary}-${spec.secondary || ''}`}
         data-key={spec.primary}
         className={`relative ${widthClass} ${heightClass} rounded-[6px] border flex flex-col items-center justify-center select-none font-mono text-[11px] sm:text-xs transition-all duration-75 ${containerStyle}`}
       >
@@ -465,7 +465,7 @@ export const KeyboardOverlay: React.FC<KeyboardOverlayProps> = ({
                 key={rowIdx}
                 className="flex items-center gap-1 sm:gap-1.5 justify-center w-full min-w-max"
               >
-                {row.map((spec) => renderKey(spec))}
+                {row.map((spec, colIdx) => renderKey(spec, rowIdx, colIdx))}
               </div>
             ))}
 

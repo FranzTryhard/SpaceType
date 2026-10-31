@@ -171,3 +171,47 @@
 .animate-error-flash {
   animation: error-flash 0.45s ease-out forwards;
 }
+
+/* Streak / Combo Counter Animations */
+@keyframes streak-pop {
+  0% {
+    transform: scale(0.92);
+  }
+  45% {
+    transform: scale(1.16);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-streak-pop {
+  animation: streak-pop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes streak-aura {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.65));
+  }
+  50% {
+    filter: drop-shadow(0 0 22px rgba(236, 72, 153, 0.95)) drop-shadow(0 0 35px rgba(168, 85, 247, 0.7));
+  }
+}
+
+.animate-streak-aura {
+  animation: streak-aura 1.4s ease-in-out infinite;
+}
+
+@keyframes bounce-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 0.8s ease-in-out infinite;
+}
+
